@@ -25,7 +25,7 @@ const AdminPanel = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch('http://localhost:54863/produto/findAllByProdutiPai');
+      const response = await fetch('http://tkg8ksk8ckw0swss0gco0008.217.15.170.97.sslip.io/produto/findAllByProdutiPai');
 
       if (!response.ok) {
         throw new Error('Erro ao carregar produtos');
@@ -44,7 +44,7 @@ const AdminPanel = () => {
   const atualizarProdutosAPI = async () => {
     try {
       toast.info('Iniciando atualização dos produtos...');
-      const response = await fetch('http://localhost:54863/produto/getProdutosAPI', {
+      const response = await fetch('http://tkg8ksk8ckw0swss0gco0008.217.15.170.97.sslip.io/produto/getProdutosAPI', {
         method: 'GET',
       });
 
@@ -68,7 +68,7 @@ const AdminPanel = () => {
     try {
       setUploadingImage(productId);
       const response = await fetch(
-        `http://localhost:54863/produto/updateFoto/${productId}`,
+        `http://tkg8ksk8ckw0swss0gco0008.217.15.170.97.sslip.io/produto/updateFoto/${productId}`,
         {
           method: 'PUT',
           body: formData,
@@ -91,7 +91,7 @@ const AdminPanel = () => {
   const toggleProductStatus = async (productId, currentStatus) => {
     try {
       const response = await fetch(
-        `http://localhost:54863/produto/changeAtivo/${productId}`,
+        `http://tkg8ksk8ckw0swss0gco0008.217.15.170.97.sslip.io/produto/changeAtivo/${productId}`,
         {
           method: 'PUT',
           headers: {
@@ -198,7 +198,7 @@ const AdminPanel = () => {
                     <div className="flex items-center space-x-3">
                       {product.img_url ? (
                         <img
-                          src={`http://localhost:54863/uploads/${product.img_url}`}
+                          src={`http://tkg8ksk8ckw0swss0gco0008.217.15.170.97.sslip.io/uploads/${product.img_url}`}
                           alt={product.nome}
                           className="w-12 h-12 object-cover rounded"
                         />

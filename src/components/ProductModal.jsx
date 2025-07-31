@@ -19,7 +19,7 @@ const ProductModal = ({ product, onClose }) => {
   const fetchVariations = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:54863/produto/findAllVariacoes/${product.id}`);
+      const response = await fetch(`http://tkg8ksk8ckw0swss0gco0008.217.15.170.97.sslip.io/produto/findAllVariacoes/${product.id}`);
 
       if (response.ok) {
         const data = await response.json();

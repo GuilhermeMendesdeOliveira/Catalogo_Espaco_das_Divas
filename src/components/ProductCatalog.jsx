@@ -28,7 +28,7 @@ const ProductCatalog = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch('http://localhost:54863/produto/findAllByProdutiPai');
+      const response = await fetch('http://tkg8ksk8ckw0swss0gco0008.217.15.170.97.sslip.io/produto/findAllByProdutiPai');
       if (!response.ok) throw new Error('Erro ao carregar produtos');
 
       const data = await response.json();
