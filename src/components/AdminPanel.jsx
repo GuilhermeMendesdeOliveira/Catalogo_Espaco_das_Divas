@@ -1,4 +1,3 @@
-// AdminPanel.jsx
 import React, { useState, useEffect } from 'react';
 import { Package, Edit3, ToggleLeft, ToggleRight, Upload, ChevronLeft, ChevronRight, RefreshCcw } from 'lucide-react';
 import LoadingSpinner from './LoadingSpinner';
@@ -62,13 +61,13 @@ const AdminPanel = () => {
         body: formData,
       });
       if (response.ok) {
-        alert('Imagem atualizada com sucesso!');
+        toast.success('Imagem enviada com sucesso!');
         fetchProducts();
       } else {
         throw new Error('Erro ao fazer upload da imagem');
       }
     } catch (err) {
-      alert('Erro ao fazer upload da imagem: ' + err.message);
+      toast.error('Erro ao fazer upload da imagem: ' + err.message);
     } finally {
       setUploadingImage(null);
     }
@@ -96,14 +95,16 @@ const AdminPanel = () => {
   const totalAtivos = products.filter(p => p.ativo).length;
   const totalInativos = totalProdutos - totalAtivos;
 
-  const filteredProducts = products.filter((p) => {
-    const matchesSearch = p.nome.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus =
-      filterStatus === 'todos' ||
-      (filterStatus === 'ativos' && p.ativo) ||
-      (filterStatus === 'inativos' && !p.ativo);
-    return matchesSearch && matchesStatus;
-  });
+  const filteredProducts = products
+    .filter((p) => {
+      const matchesSearch = p.nome.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus =
+        filterStatus === 'todos' ||
+        (filterStatus === 'ativos' && p.ativo) ||
+        (filterStatus === 'inativos' && !p.ativo);
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => a.nome.localeCompare(b.nome)); // ← Ordenação alfabética aqui
 
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
   const startIndex = (currentPage - 1) * productsPerPage;
