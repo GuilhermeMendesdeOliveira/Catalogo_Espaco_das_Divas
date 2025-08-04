@@ -72,7 +72,7 @@ const ProductModal = ({ product, onClose }) => {
 
   const handleQuantityChangeProduct = (delta) => {
     const newQty = productQuantity + delta;
-    if (newQty >= 0) {
+    if (newQty >= 1) {
       setProductQuantity(newQty);
     }
   };
@@ -131,7 +131,7 @@ const ProductModal = ({ product, onClose }) => {
                     </button>
                     <span className="text-xl font-medium min-w-[3rem] text-center">{productQuantity}</span>
                     <button
-                      onClick={() => handleQuantityChangeProduct(0)}
+                      onClick={() => handleQuantityChangeProduct(1)}
                       className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
                     >
                       <Plus className="h-4 w-4" />
