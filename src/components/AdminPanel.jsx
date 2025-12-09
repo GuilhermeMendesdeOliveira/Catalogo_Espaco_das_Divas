@@ -27,7 +27,7 @@ const AdminPanel = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch('http://tkg8ksk8ckw0swss0gco0008.217.15.170.97.sslip.io/produto/findAllByProdutiPai');
+      const response = await fetch('http://aw8kco8ck8k4c8s4ckcg440g.217.15.170.97.sslip.io/produto/findAllByProdutiPai');
       if (!response.ok) throw new Error('Erro ao carregar produtos');
       const data = await response.json();
       setProducts(Array.isArray(data.produtos) ? data.produtos : []);
@@ -41,7 +41,7 @@ const AdminPanel = () => {
   const atualizarProdutosAPI = async () => {
     try {
       toast.info('Iniciando atualização dos produtos...');
-      const response = await fetch('http://tkg8ksk8ckw0swss0gco0008.217.15.170.97.sslip.io/produto/getProdutosAPI');
+      const response = await fetch('http://aw8kco8ck8k4c8s4ckcg440g.217.15.170.97.sslip.io/produto/getProdutosAPI');
       if (!response.ok) throw new Error('Erro ao atualizar os produtos.');
       toast.success('Atualização iniciada com sucesso!');
       fetchProducts();
@@ -56,7 +56,7 @@ const AdminPanel = () => {
     formData.append('imagem', file);
     try {
       setUploadingImage(productId);
-      const response = await fetch(`http://tkg8ksk8ckw0swss0gco0008.217.15.170.97.sslip.io/produto/updateFoto/${productId}`, {
+      const response = await fetch(`http://aw8kco8ck8k4c8s4ckcg440g.217.15.170.97.sslip.io/produto/updateFoto/${productId}`, {
         method: 'PUT',
         body: formData,
       });
@@ -75,7 +75,7 @@ const AdminPanel = () => {
 
   const toggleProductStatus = async (productId, currentStatus) => {
     try {
-      const response = await fetch(`http://tkg8ksk8ckw0swss0gco0008.217.15.170.97.sslip.io/produto/changeAtivo/${productId}`, {
+      const response = await fetch(`http://aw8kco8ck8k4c8s4ckcg440g.217.15.170.97.sslip.io/produto/changeAtivo/${productId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
       });
