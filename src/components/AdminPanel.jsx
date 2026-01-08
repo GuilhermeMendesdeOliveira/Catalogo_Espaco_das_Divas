@@ -193,7 +193,7 @@ const AdminPanel = () => {
                     <div className="flex items-center space-x-3">
                       {product.img_url ? (
                         <img
-                          src={`http://tkg8ksk8ckw0swss0gco0008.217.15.170.97.sslip.io/uploads/${product.img_url}`}
+                          src={`http://aw8kco8ck8k4c8s4ckcg440g.217.15.170.97.sslip.io/uploads/${product.img_url}`}
                           alt={product.nome}
                           className="w-12 h-12 object-cover rounded"
                         />
