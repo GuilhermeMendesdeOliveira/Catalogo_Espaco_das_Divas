@@ -21,7 +21,7 @@ const ProductCard = ({ product, onClick }) => {
       <div className="aspect-square bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center relative overflow-hidden">
         {product.img_url ? (
           <img
-            src={`http://tkg8ksk8ckw0swss0gco0008.217.15.170.97.sslip.io/uploads/${product.img_url}`}
+            src={`http://aw8kco8ck8k4c8s4ckcg440g.217.15.170.97.sslip.io/uploads/${product.img_url}`}
             alt={product.nome}
             className="w-auto h-auto object-cover rounded"
           />
