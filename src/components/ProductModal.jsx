@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext';
 import LoadingSpinner from './LoadingSpinner';
 import { stripHtmlTags } from '../utils/regexHtml';
 import { toast } from 'sonner';
+import { API_ENDPOINTS } from '../api/endpoints'
 
 const ProductModal = ({ product, onClose }) => {
   const [variations, setVariations] = useState([]);
@@ -19,7 +20,8 @@ const ProductModal = ({ product, onClose }) => {
   const fetchVariations = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://aw8kco8ck8k4c8s4ckcg440g.217.15.170.97.sslip.io/produto/findAllVariacoes/${product.id}`);
+      const response = await fetch(`${API_ENDPOINTS.produtos.findAllVariacoes}${product.id}`);
+      console.log(response, "RESPONSE VARIAÇÕES")
 
       if (response.ok) {
         const data = await response.json();

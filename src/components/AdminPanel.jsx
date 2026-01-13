@@ -4,6 +4,19 @@ import LoadingSpinner from './LoadingSpinner';
 import { stripHtmlTags } from '../utils/regexHtml';
 import ElegantModal from './ElegantModal';
 import { toast } from 'sonner';
+import { API_ENDPOINTS } from '../api/endpoints'
+import axios from 'axios';
+
+const updateMessages = [
+  'Estamos sincronizando os produtos com o sistema Bling.',
+  'Esse processo pode levar até 5 minutos, dependendo da quantidade de produtos.',
+  'Evite fechar esta página durante a atualização.',
+  'Os dados de estoque e preços estão sendo atualizados.',
+  'Após a conclusão, os produtos estarão prontos para venda.',
+];
+
+
+
 
 const AdminPanel = () => {
   const [products, setProducts] = useState([]);
@@ -16,6 +29,8 @@ const AdminPanel = () => {
   const [selectedProductForToggle, setSelectedProductForToggle] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('todos');
+  const [isUpdating, setIsUpdating] = useState(false);
+
 
   const productsPerPage = 150;
 
@@ -27,7 +42,7 @@ const AdminPanel = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch('http://aw8kco8ck8k4c8s4ckcg440g.217.15.170.97.sslip.io/produto/findAllByProdutiPai');
+      const response = await fetch(API_ENDPOINTS.produtos.findAllProdutoPai);
       if (!response.ok) throw new Error('Erro ao carregar produtos');
       const data = await response.json();
       setProducts(Array.isArray(data.produtos) ? data.produtos : []);
@@ -40,13 +55,25 @@ const AdminPanel = () => {
 
   const atualizarProdutosAPI = async () => {
     try {
+      setIsUpdating(true);
       toast.info('Iniciando atualização dos produtos...');
-      const response = await fetch('http://aw8kco8ck8k4c8s4ckcg440g.217.15.170.97.sslip.io/produto/getProdutosAPI');
-      if (!response.ok) throw new Error('Erro ao atualizar os produtos.');
+      const response = await axios.put(API_ENDPOINTS.produtos.updateEstoque);
+      // const responseFetch = await fetch(API_ENDPOINTS.produtos.updateEstoque,
+      //   {
+      //     method: 'PUT',
+      //     headers: { 'Content-Type': 'application/json' },
+      //   }
+      // );
+      console.log("RESPONSE:", response.data);
+      // if (!response.ok) throw new Error('Erro ao atualizar os produtos.');
       toast.success('Atualização iniciada com sucesso!');
       fetchProducts();
+      toast.success(`Atualização concluída com sucesso! ${response.data.atualizados} produtos foram atualizados. ${response.data.criados} produtos foram Criados.`);
     } catch (err) {
       toast.error('Erro ao atualizar produtos: ' + err.message);
+    }
+    finally {
+      setIsUpdating(false);
     }
   };
 
@@ -56,7 +83,7 @@ const AdminPanel = () => {
     formData.append('imagem', file);
     try {
       setUploadingImage(productId);
-      const response = await fetch(`http://aw8kco8ck8k4c8s4ckcg440g.217.15.170.97.sslip.io/produto/updateFoto/${productId}`, {
+      const response = await fetch(`${API_ENDPOINTS.produtos.updateFoto}${productId}`, {
         method: 'PUT',
         body: formData,
       });
@@ -75,7 +102,7 @@ const AdminPanel = () => {
 
   const toggleProductStatus = async (productId, currentStatus) => {
     try {
-      const response = await fetch(`http://aw8kco8ck8k4c8s4ckcg440g.217.15.170.97.sslip.io/produto/changeAtivo/${productId}`, {
+      const response = await fetch(`${API_ENDPOINTS.produtos.changeAtivo}${productId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -117,7 +144,10 @@ const AdminPanel = () => {
   };
 
   if (loading) return <LoadingSpinner />;
+  if (isUpdating) return <LoadingSpinner title='Atualizando produtos' messages={updateMessages} />;
   if (error) return <div className="text-red-600">{error}</div>;
+
+
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -127,18 +157,25 @@ const AdminPanel = () => {
           <p className="text-gray-600">Gerencie os produtos da loja</p>
         </div>
         <button
+          disabled={isUpdating}
           onClick={() => setModalUpdateOpen(true)}
-          className="bg-pink-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-pink-700 transition"
+          className={`px-4 py-2 rounded-lg flex items-center gap-2 transition
+    ${isUpdating
+              ? 'bg-gray-400 cursor-not-allowed'
+              : 'bg-pink-600 hover:bg-pink-700 text-white'}
+  `}
         >
-          <RefreshCcw className="h-4 w-4" /> Atualizar Produtos
+          <RefreshCcw className="h-4 w-4" />
+          Atualizar Produtos
         </button>
+
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white border p-4 rounded-lg">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        {/* <div className="bg-white border p-4 rounded-lg">
           <h4 className="text-sm text-gray-500">Preço Total do Estoque</h4>
           <p className="text-xl font-semibold text-pink-600">{formatPrice(precoTotalEstoque)}</p>
-        </div>
+        </div> */}
         <div className="bg-white border p-4 rounded-lg">
           <h4 className="text-sm text-gray-500">Qtd. Produtos no Banco</h4>
           <p className="text-xl font-semibold">{totalProdutos}</p>
@@ -193,7 +230,7 @@ const AdminPanel = () => {
                     <div className="flex items-center space-x-3">
                       {product.img_url ? (
                         <img
-                          src={`http://tkg8ksk8ckw0swss0gco0008.217.15.170.97.sslip.io/uploads/${product.img_url}`}
+                          src={`${API_ENDPOINTS.produtos.visualizarFoto}${product.img_url}`}
                           alt={product.nome}
                           className="w-12 h-12 object-cover rounded"
                         />

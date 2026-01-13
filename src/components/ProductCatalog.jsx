@@ -3,6 +3,8 @@ import ProductCard from './ProductCard';
 import ProductModal from './ProductModal';
 import LoadingSpinner from './LoadingSpinner';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { API_ENDPOINTS } from '../api/endpoints';
+import axios from 'axios'
 
 const ProductCatalog = () => {
   const [products, setProducts] = useState([]);
@@ -28,11 +30,13 @@ const ProductCatalog = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch('http://aw8kco8ck8k4c8s4ckcg440g.217.15.170.97.sslip.io/produto/findAllByProdutiPai');
-      if (!response.ok) throw new Error('Erro ao carregar produtos');
+      const response = await axios.get(API_ENDPOINTS.produtos.findAllProdutoPai);
+      
+      // if (!response.status !== 200) throw new Error('Erro ao carregar produtos');
 
-      const data = await response.json();
-      const ativos = data.produtos.filter((produto) => produto.ativo === true);
+      const data = response.data.produtos;
+      const ativos = data.filter((produto) => produto.ativo === true && produto.estoque >= 0);
+      console.log(ativos, "ativos")
       setProducts(ativos);
     } catch (err) {
       setError(err.message);

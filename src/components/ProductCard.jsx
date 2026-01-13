@@ -1,6 +1,7 @@
 import React from 'react';
 import { Package, AlertCircle } from 'lucide-react';
 import { stripHtmlTags } from '../utils/regexHtml';
+import { API_ENDPOINTS } from '../api/endpoints';
 
 const ProductCard = ({ product, onClick }) => {
   const formatPrice = (price) => {
@@ -11,6 +12,9 @@ const ProductCard = ({ product, onClick }) => {
   };
 
   const isOutOfStock = product.estoque === 0;
+  const hasVariations = product.temVariacoes;
+
+  // console.log(product, "Produto Card");
 
   return (
     <div
@@ -21,7 +25,7 @@ const ProductCard = ({ product, onClick }) => {
       <div className="aspect-square bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center relative overflow-hidden">
         {product.img_url ? (
           <img
-            src={`http://tkg8ksk8ckw0swss0gco0008.217.15.170.97.sslip.io/uploads/${product.img_url}`}
+            src={`${API_ENDPOINTS.produtos.visualizarFoto}${product.img_url}`}
             alt={product.nome}
             className="w-auto h-auto object-cover rounded"
           />
@@ -67,6 +71,11 @@ const ProductCard = ({ product, onClick }) => {
               <span className={`text-xs ${isOutOfStock ? 'text-red-500' : 'text-green-600'}`}>
                 {isOutOfStock ? 'Sem estoque' : `${product.estoque} em estoque`}
               </span>
+              {hasVariations && (
+                <span className=" bg-pink-500 text-white text-xs font-medium px-2 py-1 rounded-full">
+                  Variações
+                </span>
+              )}
             </div>
           </div>
         </div>
